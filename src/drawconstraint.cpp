@@ -904,7 +904,8 @@ void Constraint::DoLayout(DrawAs how, Canvas *canvas,
             }
             return;
         }
-
+        
+        case Type::CIRCLE_ARC_LINE_TANGENT:
         case Type::CURVE_CURVE_TANGENT:
         case Type::CUBIC_LINE_TANGENT:
         case Type::ARC_LINE_TANGENT: {

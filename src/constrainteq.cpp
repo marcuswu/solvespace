@@ -933,6 +933,26 @@ void ConstraintBase::GenerateEquations(IdList<Equation,hEquation> *l,
             return;
         }
 
+        case Type::CIRCLE_ARC_LINE_TANGENT: {
+            EntityBase *arc  = SK.GetEntity(entityA);
+            EntityBase *line = SK.GetEntity(entityB);
+
+            ExprVector ac = SK.GetEntity(arc->point[0])->PointGetExprs();
+            ExprVector ap = SK.GetEntity(arc->point[1])->PointGetExprs();
+
+            ExprVector ld = line->VectorGetExprs();
+            Expr * ldMag = ld.Magnitude();
+            ExprVector pp = ld.WithMagnitude(ld.Dot(ld)->Div(ldMag->Square()));
+            Expr * pDist = pp.Minus(ac).Magnitude();
+            Expr * aDist = ap.Minus(ac).Magnitude();
+            // ExprVector ap = ac.Dot()
+                // SK.GetEntity(arc->point[other ? 2 : 1])->PointGetExprs();
+
+            // The line formula is radius distance from the center at its closest point
+            AddEq(l, (pDist->Minus(aDist)), 0);
+            return;
+        }
+
         case Type::ARC_LINE_TANGENT: {
             EntityBase *arc  = SK.GetEntity(entityA);
             EntityBase *line = SK.GetEntity(entityB);
