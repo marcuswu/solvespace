@@ -939,10 +939,15 @@ void ConstraintBase::GenerateEquations(IdList<Equation,hEquation> *l,
 
             ExprVector ac = SK.GetEntity(arc->point[0])->PointGetExprs();
             ExprVector ap = SK.GetEntity(arc->point[1])->PointGetExprs();
+            ExprVector lp = SK.GetEntity(line->point[0])->PointGetExprs();
 
-            ExprVector ld = line->VectorGetExprs();
-            Expr * ldMag = ld.Magnitude();
-            ExprVector pp = ld.WithMagnitude(ld.Dot(ld)->Div(ldMag->Square()));
+            ExprVector b = line->VectorGetExprs();
+            ExprVector a = lp.Minus(ac);
+
+            //ExprVector offset = b.WithMagnitude(a.Dot(b)->Div(b.Magnitude()->Square()));
+            ExprVecvtor pp = lp.Plus(b.WithMagnitude(a.Dot(b)->Div(b.Magnitude()->Square())));
+            
+            //ExprVector pp = ld.WithMagnitude(ld.Dot(ld)->Div(ldMag->Square()));
             Expr * pDist = pp.Minus(ac).Magnitude();
             Expr * aDist = ap.Minus(ac).Magnitude();
             // ExprVector ap = ac.Dot()
